@@ -28,4 +28,20 @@ public class UtenteService {
     public Utente findById(Long id) {
         return utenteRepo.findById(id).orElse(null);
     }
+
+    public List<Utente> findByNomeStartingWith(String prefix) {
+        return utenteRepo.findByNomeStartingWith(prefix);
+    }
+
+    public List<Utente> findByCreditoGreaterThan(int credito) {
+        return utenteRepo.findByCreditoGreaterThan(credito);
+    }
+
+    public List<Utente> findByNomeOrCognomeIsNull() {
+        return utenteRepo.findByNomeIsNullOrCognomeIsNull();
+    }
+
+    public List<Utente> findByCreditoBetween() {
+        return utenteRepo.findByCreditoBetween(1, 1000);
+    }
 }

@@ -35,7 +35,7 @@ public class Demo5Application implements CommandLineRunner {
 		u1.setCognome("Cognome 1");
 		u1.setUsername("utente1");
 		u1.setPassword("password1");
-		u1.setCredito(1000); // espressi in centesimi
+		u1.setCredito(1000);
 
 		System.out.println("U1 before save");
 		System.out.println(u1);

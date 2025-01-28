@@ -2,7 +2,6 @@ package org.generation.jaita138.boh.demo5.cli;
 
 import java.util.List;
 import java.util.Scanner;
-
 import org.generation.jaita138.boh.demo5.db.entity.Utente;
 import org.generation.jaita138.boh.demo5.db.service.UtenteService;
 
@@ -23,7 +22,11 @@ public class CliManager {
         System.out.println("2. Inserisci nuovo record");
         System.out.println("3. Modifica record");
         System.out.println("4. Elimina record");
-        System.out.println("5. Esci");
+        System.out.println("5. Trova utenti con nome che inizia con 'a'");
+        System.out.println("6. Trova utenti con credito superiore a 10 euro");
+        System.out.println("7. Trova utenti con credito positivo ma inferiore a 10 euro");
+        System.out.println("8. Trova utenti con nome o cognome NULL");
+        System.out.println("9. Esci");
         System.out.println("");
 
         String strValue = sc.nextLine();
@@ -43,6 +46,18 @@ public class CliManager {
                 delete();
                 break;
             case 5:
+                findByNomeStartingWithA();
+                break;
+            case 6:
+                findByCreditoGreaterThan();
+                break;
+            case 7:
+                findByCreditoBetween();
+                break;
+            case 8:
+                findByNomeOrCognomeIsNull();
+                break;
+            case 9:
                 return;
             default:
                 System.out.println("Operazione non valida");
@@ -133,5 +148,53 @@ public class CliManager {
         } else {
             System.out.println("Utente non trovato");
         }
+    }
+
+    private void findByNomeStartingWithA() {
+        List<Utente> utenti = utenteService.findByNomeStartingWith("a");
+
+        System.out.println("Utenti con nome che inizia con 'a':");
+        for (Utente utente : utenti) {
+            System.out.println(utente);
+        }
+        System.out.println("-------------------------------------");
+    }
+
+    private void findByCreditoGreaterThan() {
+        List<Utente> utenti = utenteService.findByCreditoGreaterThan(1000);
+
+        System.out.println("Utenti con credito superiore a 10 euro:");
+        for (Utente utente : utenti) {
+            System.out.println(utente);
+        }
+        System.out.println("-------------------------------------");
+    }
+
+    private void findByCreditoBetween() {
+        List<Utente> utenti = utenteService.findByCreditoBetween();
+
+        System.out.println("Utenti con credito positivo ma inferiore a 10 euro:");
+        if (utenti.isEmpty()) {
+            System.out.println("Nessun utente trovato con credito positivo ma inferiore a 10 euro.");
+        } else {
+            for (Utente utente : utenti) {
+                System.out.println(utente);
+            }
+        }
+        System.out.println("-------------------------------------");
+    }
+
+    private void findByNomeOrCognomeIsNull() {
+        List<Utente> utenti = utenteService.findByNomeOrCognomeIsNull();
+
+        System.out.println("Utenti con nome o cognome NULL:");
+        if (utenti.isEmpty()) {
+            System.out.println("Nessun utente trovato con nome o cognome NULL.");
+        } else {
+            for (Utente utente : utenti) {
+                System.out.println(utente);
+            }
+        }
+        System.out.println("-------------------------------------");
     }
 }

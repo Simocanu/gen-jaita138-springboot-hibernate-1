@@ -80,7 +80,7 @@ public class Utente {
                 + "  cognome=" + cognome + ",\n"
                 + "  username=" + username + ",\n"
                 + "  password=" + password + ",\n"
-                + "  credito=" + (credito * 100) + " centesimi\n"
+                + "  credito=" + (credito * 100) + "\n"
                 + "]";
     }
 
