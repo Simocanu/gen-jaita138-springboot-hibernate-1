@@ -1,10 +1,6 @@
 package org.generation.jaita138.boh.demo5.db.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Utente {
@@ -13,16 +9,23 @@ public class Utente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 64)
+    @Column(length = 64, nullable = false)
     private String nome;
-    @Column(length = 64)
+
+    @Column(length = 64, nullable = false)
     private String cognome;
-    @Column(length = 128)
+
+    @Column(length = 128, unique = true, nullable = false)
     private String username;
-    @Column(length = 64)
+
+    @Column(length = 64, nullable = false)
     private String password;
 
     private int credito;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     public Long getId() {
         return id;
@@ -72,6 +75,14 @@ public class Utente {
         this.credito = credito;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "Utente [\n"
@@ -80,8 +91,8 @@ public class Utente {
                 + "  cognome=" + cognome + ",\n"
                 + "  username=" + username + ",\n"
                 + "  password=" + password + ",\n"
-                + "  credito=" + (credito * 100) + "\n"
+                + "  credito=" + credito + ",\n"
+                + "  role=" + (role != null ? role.getTitolo() : "Nessun ruolo") + "\n"
                 + "]";
     }
-
 }

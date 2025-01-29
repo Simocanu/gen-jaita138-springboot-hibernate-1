@@ -3,16 +3,20 @@ package org.generation.jaita138.boh.demo5.cli;
 import java.util.List;
 import java.util.Scanner;
 import org.generation.jaita138.boh.demo5.db.entity.Utente;
+import org.generation.jaita138.boh.demo5.db.entity.Role;
+import org.generation.jaita138.boh.demo5.db.service.RoleService;
 import org.generation.jaita138.boh.demo5.db.service.UtenteService;
 
 public class CliManager {
 
     private Scanner sc;
     private UtenteService utenteService;
+    private RoleService roleService;
 
-    public CliManager(UtenteService utenteService) {
+    public CliManager(UtenteService utenteService, RoleService roleService) {
         sc = new Scanner(System.in);
         this.utenteService = utenteService;
+        this.roleService = roleService;
         printOptions();
     }
 
@@ -98,7 +102,25 @@ public class CliManager {
         int credito = Integer.parseInt(strCredito);
         u.setCredito(credito);
 
+        System.out.println("Ruoli disponibili:");
+        List<Role> roles = roleService.findAll();
+        for (Role role : roles) {
+            System.out.println(role.getId() + " - " + role.getTitolo());
+        }
+
+        System.out.println("Inserisci l'ID del ruolo:");
+        Long roleId = Long.parseLong(sc.nextLine());
+        Role selectedRole = roleService.findById(roleId);
+
+        if (selectedRole != null) {
+            u.setRole(selectedRole);
+        } else {
+            System.out.println("Ruolo non valido, impostato USER di default.");
+            u.setRole(roleService.findByTitolo("USER"));
+        }
+
         utenteService.save(u);
+        System.out.println("Utente salvato con successo!");
     }
 
     private void edit() {
@@ -133,7 +155,30 @@ public class CliManager {
         int credito = Integer.parseInt(strCredito);
         u.setCredito(credito);
 
+        System.out.println("Ruolo attuale: " + u.getRole().getTitolo());
+        System.out.println("Vuoi modificare il ruolo? (s/n)");
+        String changeRole = sc.nextLine();
+
+        if (changeRole.equalsIgnoreCase("s")) {
+            System.out.println("Ruoli disponibili:");
+            List<Role> roles = roleService.findAll();
+            for (Role role : roles) {
+                System.out.println(role.getId() + " - " + role.getTitolo());
+            }
+
+            System.out.println("Inserisci il nuovo ID del ruolo:");
+            Long roleId = Long.parseLong(sc.nextLine());
+            Role selectedRole = roleService.findById(roleId);
+
+            if (selectedRole != null) {
+                u.setRole(selectedRole);
+            } else {
+                System.out.println("Ruolo non valido, mantenuto quello attuale.");
+            }
+        }
+
         utenteService.save(u);
+        System.out.println("Utente modificato con successo!");
     }
 
     private void delete() {
